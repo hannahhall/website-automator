@@ -1,0 +1,18 @@
+[
+  {
+    "model": "automator_api.Theme",
+    "pk": 1,
+    "fields": {
+      "name": "light",
+      "created_at": "2022-08-08 19:00:00"
+    }
+  },
+  {
+    "model": "automator_api.Theme",
+    "pk": 2,
+    "fields": {
+      "name": "dark",
+      "created_at": "2022-08-08 19:00:00"
+    }
+  }
+]
