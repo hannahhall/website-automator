@@ -4,7 +4,7 @@ from django.db import models
 class TimestampMixin(models.Model):
     """Timestamp Mixin - adds created_at, updated_at, and deleted_at fields
 
-    Args:
+    Fields:
         created_at (DateTimeField): auto adds when created
         updated_at (DateTimeField): auto adds when using .save method
         deleted_at (DateTimeField): For soft deletes, when the object was "deleted"

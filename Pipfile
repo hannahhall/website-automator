@@ -9,6 +9,8 @@ djangorestframework = "*"
 django-cors-headers = "*"
 pillow = "*"
 djangorestframework-simplejwt = "*"
+cloudinary = "*"
+dj3-cloudinary-storage = "*"
 
 [dev-packages]
 pre-commit = "*"

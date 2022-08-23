@@ -10,7 +10,7 @@ class Tech(TimestampMixin):
         icon (URLField): The image location for the tech icon
     """
     text = models.CharField(max_length=50)
-    icon = models.URLField()
+    icon = models.ImageField(upload_to='techs/')
 
     def __str__(self):
         return self.text
