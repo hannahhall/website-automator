@@ -9,6 +9,7 @@ djangorestframework = "*"
 django-cors-headers = "*"
 pillow = "*"
 djangorestframework-simplejwt = "*"
+pre-commit = "*"
 
 [dev-packages]
 autopep8 = "*"

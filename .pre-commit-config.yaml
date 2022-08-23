@@ -1,15 +1,19 @@
-- repo: local
-  hooks:
-    - id: pylint
-      name: pylint
-      entry: pylint
-      language: system
-      types: [python]
-      args:
-        [
-          "-rn", # Only display messages
-          "--load-plugins=pylint_django",
-          "--django-settings-module=automator_project.settings",
-          "--rcfile=pylintrc", # Link to your config file
-          "--load-plugins=pylint.extensions.docparams", # Load an extension
-        ]
+repos:
+  - repo: local
+    hooks:
+      - id: pylint
+        name: pylint
+        entry: pylint
+        language: system
+        types: [python]
+        exclude: (^automator_api/migrations/)|
+          (?x)^(
+              manage.py
+          )$
+        args:
+          [
+            "-rn",
+            "--load-plugins=pylint_django,pylint.extensions.no_self_use",
+            "--django-settings-module=automator_project.settings",
+            "--rcfile=./.pylintrc",
+          ]
