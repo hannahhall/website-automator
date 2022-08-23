@@ -1,0 +1,15 @@
+- repo: local
+  hooks:
+    - id: pylint
+      name: pylint
+      entry: pylint
+      language: system
+      types: [python]
+      args:
+        [
+          "-rn", # Only display messages
+          "--load-plugins=pylint_django",
+          "--django-settings-module=automator_project.settings",
+          "--rcfile=pylintrc", # Link to your config file
+          "--load-plugins=pylint.extensions.docparams", # Load an extension
+        ]
