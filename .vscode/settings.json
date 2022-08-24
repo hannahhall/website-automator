@@ -4,5 +4,10 @@
     "python.linting.pylintArgs": [
         "--load-plugins=pylint_django",
         "--django-settings-module=automator_project.settings",
-    ]
+    ],
+    "python.testing.pytestArgs": [
+        "automator_api"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
 }
