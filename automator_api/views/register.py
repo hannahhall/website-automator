@@ -1,6 +1,7 @@
 import os
 
 from django.contrib.auth import get_user_model
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
@@ -14,16 +15,23 @@ def register_user(request):
     """Register a new student or instructor
 
     Returns:
-        Response: Serialized user, 201
+        Response: User tokens, 201
     """
-    if request.data.get('instructor_password') == os.environ.get('INSTRUCTOR_PASSWORD'):
-        new_user = create_instructor(request.data)
+    if request.data['is_staff']:
+        if request.data.get('instructor_password') == os.environ.get('INSTRUCTOR_PASSWORD'):
+            new_user = create_instructor(request.data)
+        else:
+            return Response({'message': 'Please reach out to an instructor for help'},
+                            status=status.HTTP_403_FORBIDDEN)
     else:
         new_user = create_student(request.data)
 
-    serializer = serializers.UserSerializer(new_user)
+    token = TokenObtainPairSerializer.get_token(new_user)
 
-    return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response({
+        'access': str(token.access_token),
+        'refresh': str(token)
+    }, status=status.HTTP_201_CREATED)
 
 
 def create_instructor(data):
@@ -71,7 +79,7 @@ def create_user(data):
     Returns:
         User: user object that was created
     """
-    return get_user_model().objects.create(
+    return get_user_model().objects.create_user(
         username=data['username'],
         first_name=data['first_name'],
         last_name=data['last_name'],

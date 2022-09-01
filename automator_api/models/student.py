@@ -35,7 +35,7 @@ class Student(TimestampMixin):
     favorite_quote = models.CharField(null=True, blank=True, max_length=100)
 
     def __str__(self):
-        return self.user.full_name()
+        return self.user.get_full_name()
 
     def save_profile_image(self, image_string):
         """Save the student's image to cloudinary
