@@ -6,6 +6,6 @@
   good-names=i,j,ex,pk
 
 [MESSAGES CONTROL]
-  disable=broad-except,imported-auth-user,abstract-method,no-member,no-self-use
+  disable=broad-except,imported-auth-user,abstract-method,no-member,no-self-use,too-many-ancestors
 
 

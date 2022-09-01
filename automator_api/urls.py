@@ -5,6 +5,7 @@ from automator_api import views
 
 router = DefaultRouter(trailing_slash=False)
 router.register(r'users', views.UsersView, 'user')
+router.register(r'cohorts', views.CohortViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

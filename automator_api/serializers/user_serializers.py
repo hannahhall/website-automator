@@ -19,7 +19,7 @@ class StudentSerializer(serializers.ModelSerializer):
 class CreateStudentSerializer(serializers.ModelSerializer):
     """Used in RegisterView
 
-    fields: student_id, bio, github_handle, linkedin, resume_link,
+    fields: bio, github_handle, linkedin, resume_link,
             podcast_link, cohort, favorite_quote
     """
     class Meta:
