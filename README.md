@@ -15,7 +15,8 @@ Server side for [Class Website Automator](https://github.com/hannahhall/automato
     ./manage.py migrate
     ./manage.py loaddata programs cohorts themes
     ```
- 3. When opening vscode for the first time, there are 2 extension recommendations. Accept the extension installs when the pop up appears. These will make debugging and running tests easier.
+ 3. .env file - instruction coming soon
+ 4. When opening vscode for the first time, there are 2 extension recommendations. Accept the extension installs when the pop up appears. These will make debugging and running tests easier.
 
 ## Commands
 
