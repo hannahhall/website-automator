@@ -11,6 +11,7 @@ pillow = "*"
 djangorestframework-simplejwt = "*"
 cloudinary = "*"
 dj3-cloudinary-storage = "*"
+coverage = "*"
 
 [dev-packages]
 pre-commit = "*"

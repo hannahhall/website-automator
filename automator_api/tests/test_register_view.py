@@ -6,7 +6,6 @@ from rest_framework.test import APITestCase
 
 from automator_api.views import register
 from automator_api.models import Student, Cohort
-from automator_api.serializers import UserSerializer
 
 from . import mocks
 
@@ -57,17 +56,22 @@ class TestUserView(APITestCase):
                 side_effect=mocks.mock_student)
     @mock.patch('automator_api.serializers.CreateStudentSerializer.is_valid',
                 side_effect=mocks.mock_is_valid)
-    def test_create_student(self, mock_is_valid, mock_student, mock_user):
+    @mock.patch('automator_api.models.student.Student.save_profile_image',
+                side_effect=mocks.mock_save_image)
+    def test_create_student(self, mock_save_image, mock_is_valid, mock_student, mock_user):
         """Test the create student return user
         """
         data = {
-            'first_name': "test"
+            'first_name': "test",
+            'image': 'base64'
         }
         actual = register.create_student(data)
 
         mock_is_valid.assert_called_once_with(raise_exception=True)
+        mock_save_image.assert_called_once_with(data['image'])
         mock_student.assert_called_once_with(user=self.user)
         mock_user.assert_called_once_with(data)
+
         self.assertEqual(self.user, actual)
 
     @mock.patch('automator_api.views.register.create_user',
@@ -88,47 +92,59 @@ class TestUserView(APITestCase):
                 side_effect=mocks.mock_environ_get)
     @mock.patch('automator_api.views.register.create_instructor',
                 side_effect=mocks.mock_user)
-    def test_register_instructor(self, mock_create_instructor, mock_environ_get):
+    def test_register_instructor(self, _, mock_environ_get):
         """Test POST request to register instructor
         """
         data = {
-            'instructor_password': 'password'
+            'instructor_password': 'password',
+            'is_staff': True,
         }
-
-        query_dict = QueryDict('', mutable=True)
-        query_dict.update(data)
 
         response = self.client.post('/api/register', data)
 
         mock_environ_get.assert_called_with('INSTRUCTOR_PASSWORD')
-        mock_create_instructor.assert_called_with(query_dict)
 
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
-        expected = UserSerializer(self.user)
+        self.assertIsNotNone(response.data['access'])
+        self.assertIsNotNone(response.data['refresh'])
 
-        self.assertEqual(expected.data, response.data)
-
-    @mock.patch('os.environ.get', side_effect=mocks.mock_environ_get)
     @mock.patch('automator_api.views.register.create_student',
                 side_effect=mocks.mock_user)
-    def test_register_student(self, mock_create_student, mock_environ_get):
+    def test_register_student(self, mock_create_student):
         """Test POST request to register student
         """
-        data = {
-            'instructor_password': 'wrong'
-        }
+        data = {}
 
         query_dict = QueryDict('', mutable=True)
         query_dict.update(data)
 
         response = self.client.post('/api/register', data)
 
-        mock_environ_get.assert_called_with('INSTRUCTOR_PASSWORD')
         mock_create_student.assert_called_with(query_dict)
 
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
-        expected = UserSerializer(self.user)
+        self.assertIsNotNone(response.data['access'])
+        self.assertIsNotNone(response.data['refresh'])
 
-        self.assertEqual(expected.data, response.data)
+    @mock.patch('os.environ.get',
+                side_effect=mocks.mock_environ_get)
+    @mock.patch('automator_api.views.register.create_instructor',
+                side_effect=mocks.mock_user)
+    def test_instructor_failed_to_register_attempt(self, _, mock_environ_get):
+        """Test user tries to register as an instructor with the wrong password
+        """
+        data = {
+            'instructor_password': 'password_wrong',
+            'is_staff': True,
+        }
+
+        response = self.client.post('/api/register', data)
+
+        mock_environ_get.assert_called_with('INSTRUCTOR_PASSWORD')
+
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
+
+        self.assertEqual(
+            'Please reach out to an instructor for help', response.data['message'])

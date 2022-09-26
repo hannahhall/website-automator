@@ -17,3 +17,7 @@ def mock_is_valid(raise_exception=False):
 
 def mock_environ_get(_):
     return 'password'
+
+
+def mock_save_image(_):
+    pass

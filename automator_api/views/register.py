@@ -17,7 +17,7 @@ def register_user(request):
     Returns:
         Response: User tokens, 201
     """
-    if request.data['is_staff']:
+    if request.data.get('is_staff'):
         if request.data.get('instructor_password') == os.environ.get('INSTRUCTOR_PASSWORD'):
             new_user = create_instructor(request.data)
         else:
