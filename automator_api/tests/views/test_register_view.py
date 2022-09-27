@@ -91,6 +91,7 @@ class TestRegisterView(APITestCase):
         data = {
             'instructor_password': 'password',
             'is_staff': True,
+            'password': 's3cur3-p4ssw0rd'
         }
 
         response = self.client.post('/api/register', data, format='json')
@@ -109,7 +110,8 @@ class TestRegisterView(APITestCase):
         """Test POST request to register student
         """
         data = {
-            'is_staff': False
+            'is_staff': False,
+            'password': 's3cur3-p4ssw0rd'
         }
 
         response = self.client.post('/api/register', data, format='json')
@@ -129,6 +131,7 @@ class TestRegisterView(APITestCase):
         data = {
             'instructor_password': 'password_wrong',
             'is_staff': True,
+            'password': 's3cur3-p4ssw0rd'
         }
 
         response = self.client.post('/api/register', data, format='json')
@@ -138,4 +141,18 @@ class TestRegisterView(APITestCase):
         self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
 
         self.assertEqual(
-            'Please reach out to an instructor for help', response.data['message'])
+            'Please reach out to #class-website-automator for help',
+            response.data['instructor_password']
+        )
+
+    def test_password_validation_returns_400(self):
+        """Test when password validation fails, a 400 error is returned with validation message
+        """
+        data = {
+            'password': 'password'
+        }
+
+        response = self.client.post('/api/register', data, format='json')
+
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertIsNotNone(response.data['password'])

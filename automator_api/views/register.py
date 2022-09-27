@@ -1,6 +1,7 @@
 import os
 
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, password_validation
+from django.core.exceptions import ValidationError
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
@@ -17,12 +18,19 @@ def register_user(request):
     Returns:
         Response: User tokens, 201
     """
+    try:
+        password_validation.validate_password(request.data['password'])
+    except ValidationError as ex:
+        return Response({'password': ex.messages[0]}, status=status.HTTP_400_BAD_REQUEST)
+
     if request.data.get('is_staff'):
         if request.data.get('instructor_password') == os.environ.get('INSTRUCTOR_PASSWORD'):
             new_user = create_instructor(request.data)
         else:
-            return Response({'message': 'Please reach out to an instructor for help'},
-                            status=status.HTTP_403_FORBIDDEN)
+            return Response(
+                {'instructor_password': 'Please reach out to #class-website-automator for help'},
+                status=status.HTTP_403_FORBIDDEN
+            )
     else:
         new_user = create_student(request.data)
 
