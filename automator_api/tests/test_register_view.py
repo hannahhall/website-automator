@@ -1,29 +1,22 @@
 from unittest import mock
 from django.contrib.auth import get_user_model
-from django.http import QueryDict
 from rest_framework import status
 from rest_framework.test import APITestCase
 
 from automator_api.views import register
 from automator_api.models import Student, Cohort
 
-from . import mocks
+from . import mocks, utils
 
 
-class TestUserView(APITestCase):
+class TestRegisterView(APITestCase):
     """Test for register functions
     """
     fixtures = ['programs', 'cohorts']
 
     def setUp(self):
         super().setUp()
-        self.user = get_user_model().objects.create(
-            username='testUser',
-            first_name='Test',
-            last_name='McTestson',
-            email='test@test.com',
-            password='test1234',
-        )
+        self.user = utils.create_test_user()
 
         self.student = Student.objects.create(
             user=self.user,
@@ -92,7 +85,7 @@ class TestUserView(APITestCase):
                 side_effect=mocks.mock_environ_get)
     @mock.patch('automator_api.views.register.create_instructor',
                 side_effect=mocks.mock_user)
-    def test_register_instructor(self, _, mock_environ_get):
+    def test_register_instructor(self, mock_create_instructor, mock_environ_get):
         """Test POST request to register instructor
         """
         data = {
@@ -100,9 +93,10 @@ class TestUserView(APITestCase):
             'is_staff': True,
         }
 
-        response = self.client.post('/api/register', data)
+        response = self.client.post('/api/register', data, format='json')
 
         mock_environ_get.assert_called_with('INSTRUCTOR_PASSWORD')
+        mock_create_instructor.assert_called_with(data)
 
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
@@ -114,14 +108,13 @@ class TestUserView(APITestCase):
     def test_register_student(self, mock_create_student):
         """Test POST request to register student
         """
-        data = {}
+        data = {
+            'is_staff': False
+        }
 
-        query_dict = QueryDict('', mutable=True)
-        query_dict.update(data)
+        response = self.client.post('/api/register', data, format='json')
 
-        response = self.client.post('/api/register', data)
-
-        mock_create_student.assert_called_with(query_dict)
+        mock_create_student.assert_called_with(data)
 
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
@@ -130,9 +123,7 @@ class TestUserView(APITestCase):
 
     @mock.patch('os.environ.get',
                 side_effect=mocks.mock_environ_get)
-    @mock.patch('automator_api.views.register.create_instructor',
-                side_effect=mocks.mock_user)
-    def test_instructor_failed_to_register_attempt(self, _, mock_environ_get):
+    def test_instructor_failed_to_register_attempt(self, mock_environ_get):
         """Test user tries to register as an instructor with the wrong password
         """
         data = {
@@ -140,7 +131,7 @@ class TestUserView(APITestCase):
             'is_staff': True,
         }
 
-        response = self.client.post('/api/register', data)
+        response = self.client.post('/api/register', data, format='json')
 
         mock_environ_get.assert_called_with('INSTRUCTOR_PASSWORD')
 
