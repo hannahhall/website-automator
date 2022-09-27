@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from automator_api.serializers import UserSerializer
-from .utils import create_test_user
+from ..utils import create_test_user
 
 
 class TestUserView(APITestCase):

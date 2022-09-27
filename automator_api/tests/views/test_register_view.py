@@ -6,7 +6,7 @@ from rest_framework.test import APITestCase
 from automator_api.views import register
 from automator_api.models import Student, Cohort
 
-from . import mocks, utils
+from .. import mocks, utils
 
 
 class TestRegisterView(APITestCase):
