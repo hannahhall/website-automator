@@ -11,12 +11,19 @@ pillow = "*"
 djangorestframework-simplejwt = "*"
 cloudinary = "*"
 dj3-cloudinary-storage = "*"
+coverage = "*"
 
 [dev-packages]
 pre-commit = "*"
 autopep8 = "*"
 pylint = "*"
 pylint-django = "*"
+pytest = "*"
+pytest-django = "*"
 
 [requires]
 python_version = "3.9"
+
+[scripts]
+test = "sh testing.sh"
+

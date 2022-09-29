@@ -22,5 +22,6 @@ Server side for [Class Website Automator](https://github.com/hannahhall/automato
 
 * Run the server: `./manage.py runserver`
 * Run tests: `./manage.py test`
+* Run tests with coverage: `pipenv run test`
 * Create a super user (for use with django admin): `./manage.py createsuperuser`
-
+* Lock the package requirements after adding packages: `pipenv requirements > requirements.txt`
