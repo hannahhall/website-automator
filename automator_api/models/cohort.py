@@ -20,7 +20,8 @@ class Cohort(TimestampMixin):
     demo_day_link = models.URLField(default='http://nashss.com/demoday')
     slack_channel = models.CharField(max_length=50)
     github_organization = models.CharField(max_length=100)
-    program = models.ForeignKey('Program', on_delete=models.DO_NOTHING)
+    program = models.ForeignKey(
+        'Program', on_delete=models.DO_NOTHING, related_name='cohorts')
 
     def __str__(self):
         return f'{self.name} - {self.program.name}'
