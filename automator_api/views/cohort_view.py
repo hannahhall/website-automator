@@ -1,5 +1,5 @@
 from automator_api.models import Cohort
-from automator_api.views.utils import MultiSerializerViewSet
+from automator_api.views.multi_serializer_viewset import MultiSerializerViewSet
 from automator_api.serializers import CohortListSerializer
 
 

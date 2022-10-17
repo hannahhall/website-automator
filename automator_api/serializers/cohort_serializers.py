@@ -10,4 +10,4 @@ class CohortListSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Cohort
-        fields = ('id', 'name')
+        fields = ('id', 'name', 'demo_day')
