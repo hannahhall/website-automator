@@ -1,0 +1,11 @@
+[
+  {
+    "model": "automator_api.Tech",
+    "pk": 1,
+    "fields": {
+      "text": "Github",
+      "icon": "https://res.cloudinary.com/nashvillesoftwareschool/image/upload/v1661358373/techs/tech-github_deqxwf.png",
+      "created_at": "2022-10-17 12:00:00"
+    }
+  }
+]

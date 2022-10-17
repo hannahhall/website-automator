@@ -2,4 +2,4 @@
 show_missing = True
 
 [run]
-omit = automator_project/*
+omit = automator_project/*, automator_api/tests/*, manage.py
