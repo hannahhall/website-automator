@@ -1,11 +1,68 @@
 [
   {
-    "model": "automator_api.Tech",
+    "model": "automator_api.tech",
     "pk": 1,
     "fields": {
+      "created_at": "2022-10-17T12:00:00Z",
+      "updated_at": null,
+      "deleted_at": null,
       "text": "Github",
-      "icon": "https://res.cloudinary.com/nashvillesoftwareschool/image/upload/v1661358373/techs/tech-github_deqxwf.png",
-      "created_at": "2022-10-17 12:00:00"
+      "icon": "techs/tech-github_deqxwf"
+    }
+  },
+  {
+    "model": "automator_api.tech",
+    "pk": 2,
+    "fields": {
+      "created_at": "2022-10-18T18:32:24.595Z",
+      "updated_at": "2022-10-18T18:32:24.595Z",
+      "deleted_at": null,
+      "text": "CSS",
+      "icon": "techs/tech-css_ulguoj"
+    }
+  },
+  {
+    "model": "automator_api.tech",
+    "pk": 3,
+    "fields": {
+      "created_at": "2022-10-18T22:21:04.360Z",
+      "updated_at": "2022-10-18T22:21:04.360Z",
+      "deleted_at": null,
+      "text": "Django",
+      "icon": "techs/Django_phhrzx"
+    }
+  },
+  {
+    "model": "automator_api.tech",
+    "pk": 4,
+    "fields": {
+      "created_at": "2022-10-18T22:22:56.500Z",
+      "updated_at": "2022-10-18T22:22:56.500Z",
+      "deleted_at": null,
+      "text": "HTML",
+      "icon": "techs/HTML_io28xk"
+    }
+  },
+  {
+    "model": "automator_api.tech",
+    "pk": 5,
+    "fields": {
+      "created_at": "2022-10-18T22:33:48.185Z",
+      "updated_at": "2022-10-18T22:33:48.185Z",
+      "deleted_at": null,
+      "text": "Heroku",
+      "icon": "techs/Heroku_e8kjwe"
+    }
+  },
+  {
+    "model": "automator_api.tech",
+    "pk": 6,
+    "fields": {
+      "created_at": "2022-10-19T15:47:39.622Z",
+      "updated_at": "2022-10-19T15:47:39.622Z",
+      "deleted_at": null,
+      "text": ".Net Core",
+      "icon": "techs/.Net_Core_ao2jn3"
     }
   }
 ]

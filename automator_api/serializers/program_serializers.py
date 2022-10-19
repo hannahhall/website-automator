@@ -36,7 +36,7 @@ class ProgramCreateSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Program
-        fields = ('name', 'techs')
+        fields = ('id', 'name', 'techs')
 
     def create(self, validated_data):
         """Override the create method to add the techs to a program
