@@ -1,3 +1,4 @@
+import os
 from django.db import models
 from cloudinary import CloudinaryImage
 
@@ -25,4 +26,5 @@ class Tech(TimestampMixin):
             string: the url of the square icon
         """
         return CloudinaryImage(self.icon.name).build_url(aspect_ratio="1:1",
-                                                         width=100, crop="fill")
+                                                         width=100, crop="fill",
+                                                         cloud_name=os.environ.get("CLOUD_NAME"))
