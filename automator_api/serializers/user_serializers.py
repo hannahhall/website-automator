@@ -20,12 +20,12 @@ class CreateStudentSerializer(serializers.ModelSerializer):
     """Used in RegisterView
 
     fields: bio, github_handle, linkedin, resume_link,
-            podcast_link, cohort, favorite_quote
+            podcast_link, cohort, favorite_quote, image
     """
     class Meta:
         model = Student
         fields = ('bio', 'github_handle', 'linkedin', 'resume_link',
-                  'podcast_link', 'cohort', 'favorite_quote')
+                  'podcast_link', 'cohort', 'favorite_quote', 'image')
 
 
 class UserSerializer(serializers.ModelSerializer):

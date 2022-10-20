@@ -1,8 +1,6 @@
 import uuid
-import base64
 from django.conf import settings
 from django.db import models
-from django.core.files.base import ContentFile
 from .timestamp_mixin import TimestampMixin
 
 
@@ -36,16 +34,3 @@ class Student(TimestampMixin):
 
     def __str__(self):
         return self.user.get_full_name()
-
-    def save_profile_image(self, image_string):
-        """Save the student's image to cloudinary
-
-        Args:
-            image_string (string): base64 encoded string
-        """
-        file_format, imgstr = image_string.split(';base64,')
-        ext = file_format.split('/')[-1]
-        image = ContentFile(base64.b64decode(imgstr),
-                            name=f'{self.student_id}.{ext}')
-        self.image = image
-        self.save()
