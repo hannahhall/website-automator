@@ -6,8 +6,9 @@ class TechSerializer(serializers.ModelSerializer):
     """Tech Model Serializer for view
 
     Fields:
-        id, text, icon
+        id, text, icon, square_icon
     """
     class Meta:
         model = Tech
         fields = ('id', 'text', 'icon', 'square_icon')
+        read_only_fields = ('square_icon',)
