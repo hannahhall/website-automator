@@ -12,3 +12,6 @@ class TechSerializer(serializers.ModelSerializer):
         model = Tech
         fields = ('id', 'text', 'icon', 'square_icon')
         read_only_fields = ('square_icon',)
+        extra_kwargs = {
+            'icon': {'write_only': True}
+        }
