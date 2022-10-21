@@ -16,7 +16,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\": \"user\",\n    \"password\": \"password\"\n}",
+					"raw": "{\n    \"username\": \"hannahhall\",\n    \"password\": \"asdf1234\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -71,6 +71,9 @@
 		{
 			"name": "Get Techs",
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -99,7 +102,7 @@
 						{
 							"key": "icon",
 							"type": "file",
-							"src": ""
+							"src": "/Users/hannahhall/workspace/hannahhall.github.io/src/assets/tech/tech-html.png"
 						},
 						{
 							"key": "text",
