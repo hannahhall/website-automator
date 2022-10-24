@@ -49,9 +49,7 @@ class TestRegisterView(APITestCase):
                 side_effect=mocks.mock_student)
     @mock.patch('automator_api.serializers.CreateStudentSerializer.is_valid',
                 side_effect=mocks.mock_is_valid)
-    @mock.patch('automator_api.models.student.Student.save_profile_image',
-                side_effect=mocks.mock_save_image)
-    def test_create_student(self, mock_save_image, mock_is_valid, mock_student, mock_user):
+    def test_create_student(self, mock_is_valid, mock_student, mock_user):
         """Test the create student return user
         """
         data = {
@@ -61,7 +59,6 @@ class TestRegisterView(APITestCase):
         actual = register.create_student(data)
 
         mock_is_valid.assert_called_once_with(raise_exception=True)
-        mock_save_image.assert_called_once_with(data['image'])
         mock_student.assert_called_once_with(user=self.user)
         mock_user.assert_called_once_with(data)
 

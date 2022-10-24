@@ -23,7 +23,7 @@ def register_user(request):
     except ValidationError as ex:
         return Response({'password': ex.messages[0]}, status=status.HTTP_400_BAD_REQUEST)
 
-    if request.data.get('is_staff'):
+    if int(request.data.get('is_staff')):
         if request.data.get('instructor_password') == os.environ.get('INSTRUCTOR_PASSWORD'):
             new_user = create_instructor(request.data)
         else:
@@ -70,10 +70,7 @@ def create_student(data):
     user = create_user(data)
     serializer = serializers.CreateStudentSerializer(data=data)
     serializer.is_valid(raise_exception=True)
-    student = serializer.save(user=user)
-
-    if data.get('image'):
-        student.save_profile_image(data['image'])
+    serializer.save(user=user)
 
     return user
 

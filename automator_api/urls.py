@@ -7,6 +7,7 @@ router = DefaultRouter(trailing_slash=False)
 router.register(r'users', views.UsersView, 'user')
 router.register(r'cohorts', views.CohortViewSet)
 router.register(r'programs', views.ProgramViewSet)
+router.register(r'techs', views.TechViewSet, 'tech')
 
 urlpatterns = [
     path('', include(router.urls)),
