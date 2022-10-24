@@ -13,4 +13,5 @@ def create_test_user():
         last_name='McTestson',
         email='test@test.com',
         password='test1234',
+        is_staff=True
     )

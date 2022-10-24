@@ -2,6 +2,7 @@ from automator_api.models import Program
 from automator_api.views.multi_serializer_viewset import MultiSerializerViewSet
 from automator_api.serializers import (
     ProgramListSerializer, ProgramRetrieveSerializer, ProgramCreateSerializer)
+from .admin_or_read_only import IsAdminOrReadOnly
 
 
 class ProgramViewSet(MultiSerializerViewSet):
@@ -14,3 +15,4 @@ class ProgramViewSet(MultiSerializerViewSet):
         'retrieve': ProgramRetrieveSerializer,
         'create': ProgramCreateSerializer
     }
+    permission_classes = [IsAdminOrReadOnly]
