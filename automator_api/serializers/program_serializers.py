@@ -28,7 +28,7 @@ class ProgramRetrieveSerializer(serializers.ModelSerializer):
         depth = 1
 
 
-class ProgramCreateSerializer(serializers.ModelSerializer):
+class ProgramCreateUpdateSerializer(serializers.ModelSerializer):
     """Serializer for creating a program
 
     fields:
@@ -38,9 +38,12 @@ class ProgramCreateSerializer(serializers.ModelSerializer):
         model = Program
         fields = ('id', 'name', 'techs')
 
-    def create(self, validated_data):
-        """Override the create method to add the techs to a program
+    def save(self, **kwargs):
+        """Override the save method to set the techs for a program
+
+        Returns:
+            Program: the object that was saved/updated
         """
-        program = super().create(validated_data)
+        program = super().save(**kwargs)
         program.techs.set(self.initial_data.get('techs', []))
         return program
