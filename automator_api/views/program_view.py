@@ -17,3 +17,10 @@ class ProgramViewSet(MultiSerializerViewSet):
         'update': ProgramCreateUpdateSerializer,
     }
     permission_classes = [IsAdminOrReadOnly]
+
+    def get_queryset(self):
+        queryset = Program.objects.all()
+        name = self.request.query_params.get('name')
+        if name is not None:
+            queryset = queryset.filter(name__icontains=name)
+        return queryset

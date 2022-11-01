@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from automator_api.models import Program
 from .cohort_serializers import CohortListSerializer
+from .tech_serializers import TechSerializer
 
 
 class ProgramListSerializer(serializers.ModelSerializer):
@@ -21,6 +22,7 @@ class ProgramRetrieveSerializer(serializers.ModelSerializer):
         id, name
     """
     cohorts = CohortListSerializer(many=True)
+    techs = TechSerializer(many=True)
 
     class Meta:
         model = Program
