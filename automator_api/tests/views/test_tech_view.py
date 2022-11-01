@@ -46,3 +46,18 @@ class TestTechView(APITestCase):
             aspect_ratio='1:1', width=100, crop='fill', cloud_name='password')
 
         mock_environ_get.assert_called_with('CLOUD_NAME')
+
+    def test_update_tech(self):
+        """Test for updating a tech
+        """
+        tech = Tech.objects.first()
+
+        url = reverse('tech-detail', kwargs={'pk': tech.id})
+        new_text = f'{tech.text} Updated'
+        response = self.client.put(url, {'text': new_text})
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        tech.refresh_from_db()
+
+        self.assertEqual(tech.text, new_text)
