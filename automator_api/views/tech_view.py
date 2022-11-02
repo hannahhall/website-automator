@@ -1,4 +1,3 @@
-from functools import partial
 from rest_framework.viewsets import GenericViewSet
 from rest_framework import mixins, response, status
 from automator_api.models import Tech

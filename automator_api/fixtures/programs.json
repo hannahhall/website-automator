@@ -4,7 +4,12 @@
     "pk": 1,
     "fields": {
       "name": "Full-Time Web Developer Bootcamp, Python And Django",
-      "created_at": "2022-08-01 12:30:00"
+      "created_at": "2022-08-01 12:30:00",
+      "techs": [
+        1,
+        2,
+        3
+      ]
     }
   }
 ]

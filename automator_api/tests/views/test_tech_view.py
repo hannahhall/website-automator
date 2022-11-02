@@ -1,7 +1,6 @@
 from unittest import mock
 
 from rest_framework import status
-from rest_framework.test import APITestCase
 from django.urls import reverse
 
 from automator_api.models import Tech
@@ -9,20 +8,10 @@ from automator_api.tests import mocks
 from .. import utils
 
 
-class TestTechView(APITestCase):
+class TestTechView(utils.AutomatorAPITestCase):
     """Test for Tech View
     """
-    fixtures = ['programs', 'cohorts', 'techs']
-
-    def setUp(self):
-        super().setUp()
-        self.user = utils.create_test_user()
-        url = reverse('token_obtain_pair')
-        response = self.client.post(
-            url, {'username': self.user.username, 'password': 'test1234'}, format='json')
-        token = response.data['access']
-
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
+    fixtures = ['techs', 'programs', 'cohorts']
 
     @mock.patch('cloudinary.CloudinaryImage.build_url', side_effect=mocks.mock_cloudinary_build_url)
     @mock.patch('os.environ.get',

@@ -1,7 +1,6 @@
 from unittest import mock
 from django.contrib.auth import get_user_model
 from rest_framework import status
-from rest_framework.test import APITestCase
 
 from automator_api.views import register
 from automator_api.models import Student, Cohort
@@ -9,14 +8,13 @@ from automator_api.models import Student, Cohort
 from .. import mocks, utils
 
 
-class TestRegisterView(APITestCase):
+class TestRegisterView(utils.AutomatorAPITestCase):
     """Test for register functions
     """
-    fixtures = ['programs', 'cohorts']
+    fixtures = ['techs', 'programs', 'cohorts']
 
     def setUp(self):
         super().setUp()
-        self.user = utils.create_test_user()
 
         self.student = Student.objects.create(
             user=self.user,
