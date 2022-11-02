@@ -1,24 +1,13 @@
 from rest_framework import status
-from rest_framework.test import APITestCase
 from django.urls import reverse
 from automator_api.models import Tech, Program
 from .. import utils
 
 
-class TestProgramView(APITestCase):
+class TestProgramView(utils.AutomatorAPITestCase):
     """Test for Program View
     """
-    fixtures = ['programs', 'cohorts', 'techs']
-
-    def setUp(self):
-        super().setUp()
-        self.user = utils.create_test_user()
-        url = reverse('token_obtain_pair')
-        response = self.client.post(
-            url, {'username': self.user.username, 'password': 'test1234'}, format='json')
-        token = response.data['access']
-
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
+    fixtures = ['techs', 'programs', 'cohorts']
 
     def test_program_create(self):
         """Test creating a program with techs
@@ -62,3 +51,20 @@ class TestProgramView(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['techs'], data['techs'])
         self.assertEqual(response.data['name'], data['name'])
+
+    def test_remove_tech(self):
+        """Test that the tech is removed from a program
+        """
+        program = Program.objects.first()
+        tech_to_remove = program.techs.first()
+
+        url = reverse('program-techs',
+                      kwargs={'pk': program.id, 'tech_pk': tech_to_remove.id})
+
+        response = self.client.delete(url)
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        program.refresh_from_db()
+
+        self.assertNotIn(tech_to_remove, program.techs.all())
