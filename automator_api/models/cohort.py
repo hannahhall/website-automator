@@ -22,6 +22,7 @@ class Cohort(TimestampMixin):
     github_organization = models.CharField(max_length=100)
     program = models.ForeignKey(
         'Program', on_delete=models.DO_NOTHING, related_name='cohorts')
+    techs = models.ManyToManyField('Tech')
 
     def __str__(self):
         return f'{self.name} - {self.program.name}'
