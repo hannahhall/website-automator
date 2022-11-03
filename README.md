@@ -11,7 +11,7 @@ Server side for [Class Website Automator](https://github.com/hannahhall/automato
 
     ```sh
     pipenv shell
-    pipenv install
+    pipenv install --dev
     ./manage.py migrate
     ./manage.py loaddata programs cohorts themes
     ```
