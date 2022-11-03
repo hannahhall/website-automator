@@ -12,6 +12,8 @@ djangorestframework-simplejwt = "*"
 cloudinary = "*"
 dj3-cloudinary-storage = "*"
 coverage = "*"
+gunicorn = "*"
+django-on-heroku = "*"
 
 [dev-packages]
 pre-commit = "*"
@@ -26,4 +28,3 @@ python_version = "3.9"
 
 [scripts]
 test = "sh testing.sh"
-
