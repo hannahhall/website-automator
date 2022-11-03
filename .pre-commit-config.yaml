@@ -13,7 +13,7 @@ repos:
         args:
           [
             "-rn",
-            "--load-plugins=pylint_django,pylint.extensions.no_self_use",
             "--django-settings-module=automator_project.settings",
+            "--load-plugins=pylint_django,pylint.extensions.no_self_use",
             "--rcfile=./.pylintrc",
           ]
