@@ -12,7 +12,7 @@ class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = ('student_id', 'bio', 'github_handle', 'linkedin', 'resume_link',
-                  'podcast_link', 'cohort', 'favorite_quote', 'image')
+                  'podcast_link', 'cohort', 'favorite_quote', 'image', 'projects')
         depth = 1
 
 
