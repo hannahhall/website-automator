@@ -14,7 +14,8 @@ class Project(TimestampMixin):
     """
     title = models.CharField(max_length=50)
     description = models.CharField(max_length=255)
-    student = models.ForeignKey('Student', on_delete=models.CASCADE, related_name='projects')
+    student = models.ForeignKey(
+        'Student', on_delete=models.CASCADE, related_name='projects')
     deployed_url = models.URLField(null=True, blank=True)
     github_url = models.URLField(null=True, blank=True)
 
