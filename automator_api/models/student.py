@@ -1,6 +1,9 @@
 import uuid
+import os
 from django.conf import settings
 from django.db import models
+from cloudinary import CloudinaryImage
+
 from .timestamp_mixin import TimestampMixin
 
 
@@ -34,3 +37,22 @@ class Student(TimestampMixin):
 
     def __str__(self):
         return self.user.get_full_name()
+
+    @property
+    def cohort_name(self):
+        return self.cohort.name
+
+    @property
+    def first_name(self):
+        return self.user.first_name
+
+    @property
+    def last_name(self):
+        return self.user.last_name
+
+    @property
+    def email(self):
+        return self.user.email
+
+    def circle_image(self):
+        return CloudinaryImage(self.image.name).build_url(width=256, height=256, radius="max", gravity="faces", crop="fill", cloud_name=os.environ.get("CLOUD_NAME"))
