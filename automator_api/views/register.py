@@ -1,5 +1,5 @@
 import os
-
+import requests
 from django.contrib.auth import get_user_model, password_validation
 from django.core.exceptions import ValidationError
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
