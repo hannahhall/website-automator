@@ -23,6 +23,12 @@ class Cohort(TimestampMixin):
     program = models.ForeignKey(
         'Program', on_delete=models.DO_NOTHING, related_name='cohorts')
     techs = models.ManyToManyField('Tech')
+    is_deployed = models.BooleanField(default=False)
+    repo_created = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.name} - {self.program.name}'
+
+    @property
+    def github_repo(self):
+        return f'{self.github_organization}.github.io'
