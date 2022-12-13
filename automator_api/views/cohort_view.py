@@ -3,10 +3,14 @@ from time import sleep
 import requests
 from requests.exceptions import RequestException
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.response import Response
-from automator_api.models import Cohort
+from automator_api.models import Cohort, Student
+from automator_api.views.admin_or_read_only import IsAdminOrReadOnly
 from automator_api.views.multi_serializer_viewset import MultiSerializerViewSet
-from automator_api.serializers import CohortListSerializer, CohortCreateSerializer
+from automator_api.serializers import (
+    CohortListSerializer, CohortCreateSerializer, CohortDetailSerializer,
+)
 
 
 class CohortViewSet(MultiSerializerViewSet):
@@ -17,7 +21,17 @@ class CohortViewSet(MultiSerializerViewSet):
     serializers = {
         'default': CohortListSerializer,
         'create': CohortCreateSerializer,
+        'retrieve': CohortDetailSerializer,
     }
+
+    permission_classes = [IsAdminOrReadOnly]
+
+    def get_queryset(self):
+        queryset = Cohort.objects.all().order_by('-demo_day')
+        name = self.request.query_params.get('name')
+        if name is not None:
+            queryset = queryset.filter(name__icontains=name)
+        return queryset
 
     def create(self, request):
         serializer = CohortCreateSerializer(data=request.data)
@@ -33,12 +47,64 @@ class CohortViewSet(MultiSerializerViewSet):
                 sleep(10)
                 self.deploy_site(cohort, github_access)
 
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         except RequestException as ex:
             ex_json = ex.response.json()
             message = ex_json['message']
             if ex.response.status_code == status.HTTP_403_FORBIDDEN:
-                message += ' Go to your Github Application settings to grant permissions to the organization.'
+                message += ', Go to your Github Application settings to grant permissions to the organization.'
+            error_response = {
+                'id': cohort.id,
+                'message': message,
+            }
+            return Response(error_response, status=ex.response.status_code)
+
+    def update(self, request, pk):
+        cohort = Cohort.objects.get(pk=pk)
+        serializer = CohortCreateSerializer(cohort, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        cohort = serializer.save()
+        cohort.techs.set(request.data.get('techs', []))
+
+        return Response(serializer.data)
+
+    @action(methods=['DELETE'], detail=True, url_path=r'techs/(?P<tech_pk>[^/.]+)')
+    def techs(self, request, pk, tech_pk):
+        """Remove a single tech from the cohort
+        """
+        cohort = Cohort.objects.get(pk=pk)
+        cohort.techs.remove(tech_pk)
+
+        return Response(None, status=status.HTTP_204_NO_CONTENT)
+
+    @action(methods=['DELETE'], detail=True, url_path=r'students/(?P<student_id>[^/.]+)')
+    def students(self, request, pk, student_id):
+        """Remove a single student from the cohort
+        """
+        cohort = Cohort.objects.get(pk=pk)
+        student = Student.objects.get(student_id=student_id, cohort=cohort)
+        student.cohort = None
+        student.save()
+
+        return Response(None, status=status.HTTP_204_NO_CONTENT)
+
+    @action(methods=['put'], detail=True, url_path='deploy-website')
+    def deploy_website(self, request, pk):
+        cohort = Cohort.objects.get(pk=pk)
+        github_access = request.data['github_access']
+        try:
+            if not cohort.repo_created:
+                self.create_repo_from_template(cohort, github_access)
+
+            if not cohort.is_deployed:
+                sleep(10)
+                self.deploy_site(cohort, github_access)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except RequestException as ex:
+            ex_json = ex.response.json()
+            message = ex_json['message']
+            if ex.response.status_code == status.HTTP_403_FORBIDDEN:
+                message += ', Go to your Github Application settings to grant permissions to the organization.'
             error_response = {
                 'id': cohort.id,
                 'message': message,

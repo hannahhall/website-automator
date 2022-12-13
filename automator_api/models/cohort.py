@@ -19,7 +19,7 @@ class Cohort(TimestampMixin):
     demo_day_time = models.TimeField(null=True)
     demo_day_link = models.URLField(default='http://nashss.com/demoday')
     slack_channel = models.CharField(max_length=50)
-    github_organization = models.CharField(max_length=100)
+    github_organization = models.CharField(max_length=100, unique=True)
     program = models.ForeignKey(
         'Program', on_delete=models.DO_NOTHING, related_name='cohorts')
     techs = models.ManyToManyField('Tech')
@@ -32,3 +32,11 @@ class Cohort(TimestampMixin):
     @property
     def github_repo(self):
         return f'{self.github_organization}.github.io'
+
+    @property
+    def demo_day_readable(self):
+        return self.demo_day.strftime("%B %d, %Y")
+
+    @property
+    def student_count(self):
+        return self.students.count()
