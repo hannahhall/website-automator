@@ -27,7 +27,7 @@ class CohortCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cohort
         fields = ('id', 'name', 'demo_day', 'demo_day_time', 'github_organization',
-                  'slack_channel', 'program', 'techs')
+                  'slack_channel', 'program', 'techs', 'demo_day_link')
 
 
 class StudentDetailSerializer(serializers.ModelSerializer):
@@ -48,7 +48,7 @@ class CohortDetailSerializer(serializers.ModelSerializer):
         model = Cohort
         fields = ('id', 'name', 'demo_day_readable', 'demo_day_time', 'github_organization',
                   'slack_channel', 'program', 'techs', 'students', 'demo_day', 'is_deployed',
-                  'student_count', 'demo_day_link')
+                  'student_count', 'demo_day_link', 'github_repo_link', 'deployed_link')
 
     def update(self, instance, validated_data):
         return super().update(instance, validated_data)
