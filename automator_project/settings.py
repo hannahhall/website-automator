@@ -82,6 +82,10 @@ CORS_ORIGIN_WHITELIST = (
     'https://nss-automator.vercel.app'
 )
 
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r'^https://[\w\W]+\.github\.io$'
+]
+
 ROOT_URLCONF = 'automator_project.urls'
 
 TEMPLATES = [

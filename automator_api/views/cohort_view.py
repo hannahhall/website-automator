@@ -1,4 +1,5 @@
 import json
+import base64
 from time import sleep
 import requests
 from requests.exceptions import RequestException
@@ -44,6 +45,8 @@ class CohortViewSet(MultiSerializerViewSet):
 
             self.create_repo_from_template(cohort, github_access)
             if request.data['is_deployed']:
+                sleep(10)
+                self.create_env_file(cohort, github_access)
                 sleep(10)
                 self.deploy_site(cohort, github_access)
 
@@ -95,8 +98,10 @@ class CohortViewSet(MultiSerializerViewSet):
         try:
             if not cohort.repo_created:
                 self.create_repo_from_template(cohort, github_access)
+                sleep(10)
 
             if not cohort.is_deployed:
+                self.create_env_file(cohort, github_access)
                 sleep(10)
                 self.deploy_site(cohort, github_access)
             return Response(status=status.HTTP_204_NO_CONTENT)
@@ -121,19 +126,20 @@ class CohortViewSet(MultiSerializerViewSet):
         Returns:
             boolean: was the request successful
         """
-        template = "nashville-software-school/Class-Website"
+        template = "nashville-software-school/class-website-template"
         url = f"https://api.github.com/repos/{template}/generate"
 
         payload = json.dumps({
             "owner": cohort.github_organization,
             "name": cohort.github_repo,
             "description": "The class website",
-            "include_all_branches": False,
-            "private": False
+            "include_all_branches": True,
+            "private": False,
         })
         headers = {
             'Authorization': f'Bearer {github_access_token}',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-GitHub-Api-Version': '2022-11-28',
         }
 
         response = requests.post(url, headers=headers, data=payload)
@@ -142,6 +148,28 @@ class CohortViewSet(MultiSerializerViewSet):
             cohort.save()
         else:
             raise RequestException(response=response)
+        return response.ok
+
+    def create_env_file(self, cohort, github_access_token):
+        file_name = '.env.production'
+        file_content = f'REACT_APP_SITE_TITLE="Meet NSS {cohort.name}"\nREACT_APP_COHORT_ID={cohort.id}\nREACT_APP_API=https://nss-automator.herokuapp.com/api'
+        byte_content = file_content.encode('ascii')
+        payload = json.dumps({
+            'message': 'adding production env',
+            'content': base64.b64encode(byte_content).decode('ascii'),
+            'branch': 'develop',
+        })
+
+        headers = {
+            'Authorization': f'Bearer {github_access_token}',
+            'Content-Type': 'application/json',
+            'X-GitHub-Api-Version': '2022-11-28',
+        }
+
+        url = f'https://api.github.com/repos/{cohort.github_organization}/{cohort.github_repo}/contents/{file_name}'
+
+        response = requests.put(url, headers=headers, data=payload)
+
         return response.ok
 
     def deploy_site(self, cohort, github_access_token):
@@ -157,12 +185,13 @@ class CohortViewSet(MultiSerializerViewSet):
         url = f"https://api.github.com/repos/{cohort.github_organization}/{cohort.github_repo}/deployments"
 
         payload = json.dumps({
-            "ref": 'master',
-            'required_contexts': []
+            'ref': 'main',
+            'required_contexts': [],
         })
         headers = {
             'Authorization': f'Bearer {github_access_token}',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-GitHub-Api-Version': '2022-11-28',
         }
 
         response = requests.post(url, headers=headers, data=payload)
