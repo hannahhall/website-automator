@@ -12,5 +12,6 @@ router.register(r'techs', views.TechViewSet, 'tech')
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('register', views.register_user)
+    path('register', views.register_user),
+    path('github-auth', views.authenticate_github),
 ]

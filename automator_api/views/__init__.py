@@ -4,3 +4,4 @@ from .cohort_view import CohortViewSet
 from .program_view import ProgramViewSet
 from .tech_view import TechViewSet
 from .project_view import ProjectViewSet
+from .github_auth import authenticate_github

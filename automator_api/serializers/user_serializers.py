@@ -94,3 +94,14 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = ('first_name', 'last_name', 'is_staff')
+
+
+class StudentListSerializer(serializers.ModelSerializer):
+    """For viewing a list of students
+
+    fields:
+        student_id, full_name, is_complete
+    """
+    class Meta:
+        model = Student
+        fields = ('student_id', 'full_name', 'is_complete')

@@ -32,7 +32,8 @@ class Student(TimestampMixin):
     linkedin = models.CharField(max_length=75)
     resume_link = models.URLField(null=True, blank=True)
     podcast_link = models.URLField(null=True, blank=True)
-    cohort = models.ForeignKey('Cohort', on_delete=models.DO_NOTHING)
+    cohort = models.ForeignKey(
+        'Cohort', on_delete=models.DO_NOTHING, related_name='students', null=True)
     favorite_quote = models.CharField(null=True, blank=True, max_length=100)
 
     def __str__(self):
@@ -51,8 +52,18 @@ class Student(TimestampMixin):
         return self.user.last_name
 
     @property
+    def full_name(self):
+        return self.user.get_full_name()
+
+    @property
     def email(self):
         return self.user.email
 
+    @property
     def circle_image(self):
         return CloudinaryImage(self.image.name).build_url(width=256, height=256, radius="max", gravity="faces", crop="fill", cloud_name=os.environ.get("CLOUD_NAME"))
+
+    @property
+    def is_complete(self):
+        has_projects = self.projects.count()
+        return bool(self.bio and has_projects and self.image)
