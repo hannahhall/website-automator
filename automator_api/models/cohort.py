@@ -34,6 +34,14 @@ class Cohort(TimestampMixin):
         return f'{self.github_organization}.github.io'
 
     @property
+    def github_repo_link(self):
+        return f'https://github.com/{self.github_organization}/{self.github_repo}'
+
+    @property
+    def deployed_link(self):
+        return f'https://{self.github_repo}'
+
+    @property
     def demo_day_readable(self):
         return self.demo_day.strftime("%B %d, %Y")
 
