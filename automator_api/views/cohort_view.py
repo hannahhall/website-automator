@@ -132,7 +132,7 @@ class CohortViewSet(MultiSerializerViewSet):
         payload = json.dumps({
             "owner": cohort.github_organization,
             "name": cohort.github_repo,
-            "description": "The class website",
+            "description": "The class website. If you want to make styling changes take a look at the develop branch for instructions",
             "include_all_branches": True,
             "private": False,
         })
@@ -152,7 +152,7 @@ class CohortViewSet(MultiSerializerViewSet):
 
     def create_env_file(self, cohort, github_access_token):
         file_name = '.env.production'
-        file_content = f'REACT_APP_SITE_TITLE="Meet NSS {cohort.name}"\nREACT_APP_COHORT_ID={cohort.id}\nREACT_APP_API=https://nss-automator.herokuapp.com/api'
+        file_content = f'REACT_APP_SITE_TITLE="Meet NSS {cohort.name}"\nREACT_APP_COHORT_ID={cohort.id}\nREACT_APP_API=https://nss-automator.herokuapp.com/api\nREACT_APP_SITE_DESCRIPTION="Join us for Demo Day {cohort.demo_day_readable}"'
         byte_content = file_content.encode('ascii')
         payload = json.dumps({
             'message': 'adding production env',
