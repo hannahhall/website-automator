@@ -67,8 +67,8 @@ def create_student(data):
     Returns:
         user: the User object
     """
-    user = create_user(data)
     serializer = serializers.CreateStudentSerializer(data=data)
+    user = create_user(data)
     serializer.is_valid(raise_exception=True)
     serializer.save(user=user)
 
@@ -85,7 +85,7 @@ def create_user(data):
         User: user object that was created
     """
     return get_user_model().objects.create_user(
-        username=data['username'],
+        username=data['email'],
         first_name=data['first_name'],
         last_name=data['last_name'],
         email=data['email'],
