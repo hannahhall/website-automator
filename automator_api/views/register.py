@@ -68,11 +68,11 @@ def create_student(data):
         user: the User object
     """
     serializer = serializers.CreateStudentSerializer(data=data)
-    user = create_user(data)
-    serializer.is_valid(raise_exception=True)
-    serializer.save(user=user)
+    if serializer.is_valid(raise_exception=True):
+        user=create_user(data)
+        serializer.save(user=user)
 
-    return user
+        return user
 
 
 def create_user(data):
