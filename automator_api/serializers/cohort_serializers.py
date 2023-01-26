@@ -40,9 +40,13 @@ class StudentDetailSerializer(serializers.ModelSerializer):
 
 
 class CohortDetailSerializer(serializers.ModelSerializer):
-    students = StudentDetailSerializer(many=True)
+    students = serializers.SerializerMethodField()
     techs = TechSerializer(many=True)
     program = ProgramSerializer()
+
+    def get_students(self, instance):
+        students = instance.students.all().order_by('user__last_name')
+        return StudentDetailSerializer(students, many=True).data
 
     class Meta:
         model = Cohort
